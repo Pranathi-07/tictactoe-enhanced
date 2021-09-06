@@ -37,6 +37,7 @@ export class GamemenuComponent implements OnInit {
   }
   gamePlay(): void {
     this.play = true;
+    alert(this.playerMark1 + this.playerMark2);
     if (this.radioSelected === 1) {
       this.grids = 3;
     } else {

@@ -306,7 +306,7 @@
                             <p>Team 1</p>
                         </div>
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="playerMark1" name="playerMark1">
+                            <input class="form-control" [(ngModel)]="playerMark1" name="playerMark1">
                         </div>
                         <div class="col-2">
                             <button type="button" id="Save" class="btn btn-outline-info" (click)="saveEditedDeatails()">Save</button>
@@ -314,12 +314,12 @@
                     </div>
                     <div *ngIf="editMode && editPlayer1" class="row">
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="player1" name="player1">
+                            <input class="form-control" [(ngModel)]="player1" name="player1">
                         </div>
                     </div>
                     <div *ngIf="editMode && editPlayer1" class="row">
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="playerMark3" name="player3">
+                            <input class="form-control" [(ngModel)]="player3" name="player3">
                         </div>
                     </div>
                     <!-- team2 details -->
@@ -353,36 +353,31 @@
                             <p>Team 2</p>
                         </div>
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="playerMark2" name="playerMark2">
+                            <input class="form-control" [(ngModel)]="playerMark2" name="playerMark2">
                         </div>
                         <div class="col-2">
                             <button type="button" id="Save" class="btn btn-outline-info" (click)="saveEditedDeatails()">Save</button>
                         </div>
                     </div>
-                    <div *ngIf="!editMode" class="row">
+                    <div *ngIf="editMode && editPlayer2" class="row">
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="player2" name="player2">
+                            <input class="form-control" [(ngModel)]="player2" name="player2">
                         </div>
                     </div>
-                    <div *ngIf="!editMode" class="row">
+                    <div *ngIf="editMode && editPlayer2" class="row">
                         <div class="col-1">
-                            <input class="form-control" [(ngModel)="playerMark4" name="player4">
+                            <input class="form-control" [(ngModel)]="player4" name="player4">
                         </div>
                     </div>
                 </div>
-                <!-- player and symbols edit  -->
-                <!-- <div class="row">
-                    <div class="col">
-                        <input class="form-control" type=input placeholder="{{}}">
-                    </div>
-                </div>
-            </div> -->
-                <!-- grid view -->
-                <div *ngIf="continue && play" class="col">
-                    <div *ngFor="let row of rows;let i=index;" class="rows-grid">
-                        <div *ngFor="let column of columns;let j=index;" class="col-grid"></div>
-                    </div>
+
+            </div>
+            <!-- grid view -->
+            <div *ngIf="continue && play" class="col">
+                <div *ngFor="let row of rows;let i=index;" class="rows-grid">
+                    <div *ngFor="let column of columns;let j=index;" class="col-grid"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
