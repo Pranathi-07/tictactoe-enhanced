@@ -1,0 +1,35 @@
+.row {
+    margin: 20px;
+    cursor: pointer;
+    color: white;
+    /* border: 2px solid white; */
+}
+
+.col {
+    margin: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.rows-grid {
+    display: flex;
+    margin: 1px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.col-grid {
+    /* // display: flex;
+    // flex-direction: column; 
+    align-items: center; */
+    align-items: center;
+    height: 75px;
+    cursor: pointer;
+    margin: 2px;
+    width: 75px;
+    border-radius: 7%;
+    border: 2px solid white;
+    font-size: 45px;
+    color: #fff;
+    display: flex;
+}
