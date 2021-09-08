@@ -10,6 +10,7 @@ export class GamemenuComponent implements OnInit {
   play: boolean = false;
   editMode: boolean = false;
   gameStatus: boolean = false;
+  winBy: number = 0;
   player1: string = '';
   player2: string = '';
   player3: string = '';
@@ -22,7 +23,7 @@ export class GamemenuComponent implements OnInit {
   editPlayer2: boolean = false;
   editPlayer3: boolean = false;
   editPlayer4: boolean = false;
-
+  winner: boolean = false;
   players: any[] = [];
   teams: any[] = [];
   radioSelected: any;
@@ -124,6 +125,7 @@ export class GamemenuComponent implements OnInit {
     this.radioSelected = +key.target.value;
     if (this.radioSelected === 1) {
       this.noOfPlayers = 1;
+      this.gameType = '2';
     }
   }
   gameTypeChange(key: any) {
@@ -131,6 +133,9 @@ export class GamemenuComponent implements OnInit {
   }
   playersChange(key: any) {
     this.noOfPlayers = +key.target.value;
+  }
+  winByConditionChange(key: any) {
+    this.winBy = +key.target.value;
   }
   editPlayerDetails(editPlayer: any) {
     this.editMode = true;
@@ -197,7 +202,7 @@ export class GamemenuComponent implements OnInit {
     // console.log(playerMark);
   }
   updateBoard(id: number) {
-    if (this.gameType === 2) {
+    if (this.gameType === '2') {
       for (let i = 0; i < this.squares.length; i++) {
         this.squares[i]
           .filter((el) => el.id === id)
@@ -222,7 +227,7 @@ export class GamemenuComponent implements OnInit {
           alert('oops');
         } else {
           if (this.gameType === '2') {
-            information.innerHTML = 'Winner is Player ' + this.currentPlayer;
+            information.innerHTML = 'Winner is ' + this.currentPlayer.name;
           } else {
             let winnngTeam = this.currentPlayer === 0 ? 'Team 1' : 'Team 2';
             information.innerHTML = 'Winner is:' + winnngTeam;
@@ -256,7 +261,93 @@ export class GamemenuComponent implements OnInit {
     }
   }
   winnerCheck() {
-    return false;
+    if (this.grids === 3) {
+      this.horizantalWinCheck();
+      if (!this.winner) {
+        this.verticalWinCheck();
+      }
+      if (!this.winner) {
+        this.diagonalWinnerCheck();
+      }
+    } else if (this.grids === 5 && this.winBy === 5) {
+      this.horizantalWinCheck();
+      if (!this.winner) {
+        this.verticalWinCheck();
+      }
+      if (!this.winner) {
+        this.diagonalWinnerCheck();
+      }
+    }
+    return this.winner;
+  }
+  horizantalWinCheck() {
+    let size = this.grids;
+    // let winner: boolean = false;
+    for (let i = 0; i < size; i++) {
+      if (this.squares[i][0].symbol === this.currentPlayer.symbol) {
+        let j;
+
+        for (j = 1; j < size; j++) {
+          if (this.squares[i][j].symbol !== this.currentPlayer.symbol) {
+            break;
+          }
+        }
+        if (j === size) {
+          this.winner = true;
+          break;
+        }
+      }
+    }
+  }
+  verticalWinCheck() {
+    let size = this.grids;
+
+    for (let i = 0; i < size; i++) {
+      if (this.squares[0][i].symbol === this.currentPlayer.symbol) {
+        let j;
+
+        for (j = 1; j < size; j++) {
+          if (this.squares[j][i].symbol !== this.currentPlayer.symbol) {
+            break;
+          }
+        }
+        if (j === size) {
+          this.winner = true;
+          break;
+        }
+      }
+    }
+  }
+  diagonalWinnerCheck() {
+    if (!this.winner) {
+      let i;
+      let size = this.grids;
+
+      for (i = 0; i < size; i++) {
+        if (this.squares[i][i].symbol !== this.currentPlayer.symbol) {
+          break;
+        }
+
+        if (i == size - 1) {
+          this.winner = true;
+          break;
+        }
+      }
+      if (!this.winner) {
+        for (i = 0; i < size; i++) {
+          if (
+            this.squares[i][size - 1 - i].symbol !== this.currentPlayer.symbol
+          ) {
+            break;
+          }
+
+          if (i == size - 1) {
+            this.winner = true;
+            break;
+          }
+        }
+      }
+    }
   }
   async checkGamefull(rows: any): Promise<boolean> {
     let isFull = true;

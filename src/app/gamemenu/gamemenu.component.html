@@ -53,11 +53,11 @@
                     <!-- select win condition -->
                     <div class="row">
                         <div *ngIf="radioSelected===2" class="col-4">
-                            <select class="form-select" aria-label="select players">
+                            <select class="form-select" aria-label="select players" (change)="winByConditionChange($event)">
                         <option selected>Select Win by</option>
-                        <option value="1">3</option>
-                        <option value="2">4</option>
-                        <option value="3">5</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                         </div>
                     </div>
@@ -375,7 +375,7 @@
             <!-- grid view -->
             <div *ngIf="continue && play" class="col">
                 <div class="row">
-                    <p class="current-status mat-display-1" style="font-size: 15px;"></p>
+                    <h1 class="current-status mat-display-1" style="font-size: 15px;"></h1>
                 </div>
                 <div class="row">
                     <div *ngFor="let row of rows;let i=index;" class="rows-grid">
