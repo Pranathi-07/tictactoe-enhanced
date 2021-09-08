@@ -221,7 +221,11 @@ export class GamemenuComponent implements OnInit {
     if (!this.squares[rowIndex][colIndex]) {
       this.squares[rowIndex][colIndex] = this.currentPlayer;
       const information = document.querySelector('.current-status');
-      const isWinner = this.winnerCheck();
+      const isWinner =
+        this.horizantalWinCheck(rowIndex, colIndex) ||
+        this.verticalWinCheck(rowIndex, colIndex);
+      // ||
+      // this.diagonalWinnerCheck(rowIndex, colIndex);
       if (isWinner) {
         if (information === null) {
           alert('oops');
@@ -229,7 +233,7 @@ export class GamemenuComponent implements OnInit {
           if (this.gameType === '2') {
             information.innerHTML = 'Winner is ' + this.currentPlayer.name;
           } else {
-            let winnngTeam = this.currentPlayer === 0 ? 'Team 1' : 'Team 2';
+            let winnngTeam = this.currentPlayer === 0 ? 'Team 2' : 'Team 1';
             information.innerHTML = 'Winner is:' + winnngTeam;
           }
         }
@@ -260,94 +264,128 @@ export class GamemenuComponent implements OnInit {
       }
     }
   }
-  winnerCheck() {
-    if (this.grids === 3) {
-      this.horizantalWinCheck();
-      if (!this.winner) {
-        this.verticalWinCheck();
-      }
-      if (!this.winner) {
-        this.diagonalWinnerCheck();
-      }
-    } else if (this.grids === 5 && this.winBy === 5) {
-      this.horizantalWinCheck();
-      if (!this.winner) {
-        this.verticalWinCheck();
-      }
-      if (!this.winner) {
-        this.diagonalWinnerCheck();
+  // winnerCheck() {
+  //   if (this.grids === 3) {
+  //     this.horizantalWinCheck();
+  //     if (!this.winner) {
+  //       this.verticalWinCheck();
+  //     }
+  //     if (!this.winner) {
+  //       this.diagonalWinnerCheck();
+  //     }
+  //   } else if (this.grids === 5 && this.winBy === 5) {
+  //     this.horizantalWinCheck();
+  //     if (!this.winner) {
+  //       this.verticalWinCheck();
+  //     }
+  //     if (!this.winner) {
+  //       this.diagonalWinnerCheck();
+  //     }
+  //   }
+  //   return this.winner;
+  // }
+  horizantalWinCheck(rowIndex: number, colIndex: number) {
+    const rowValues = this.squares[rowIndex];
+    let leftCount = 1,
+      rightCount = 1;
+    let winner = false;
+    for (let j = colIndex; j < this.columns.length; j++) {
+      if (rowValues[j] === rowValues[j + 1]) {
+        rightCount++;
+        if (rightCount === this.winBy) {
+          winner = true;
+          return winner;
+        }
+      } else {
+        break;
       }
     }
-    return this.winner;
+    for (let j = colIndex; j >= 0; j--) {
+      if (rowValues[j] === rowValues[j - 1]) {
+        leftCount++;
+        if (leftCount === this.winBy) {
+          winner = true;
+          return winner;
+        }
+      } else {
+        break;
+      }
+    }
+    if (leftCount + rightCount - 1 === this.winBy) {
+      return true;
+    }
+    return null;
   }
-  horizantalWinCheck() {
-    let size = this.grids;
-    // let winner: boolean = false;
-    for (let i = 0; i < size; i++) {
-      if (this.squares[i][0].symbol === this.currentPlayer.symbol) {
-        let j;
+  verticalWinCheck(rowIndex: number, colIndex: number) {
+    let colValues = [];
+    for (let i = 0; i < this.rows.length; i++) {
+      colValues.push(this.squares[i][colIndex]);
+    }
 
-        for (j = 1; j < size; j++) {
-          if (this.squares[i][j].symbol !== this.currentPlayer.symbol) {
-            break;
-          }
+    let leftCount = 1,
+      rightCount = 1;
+    let winner = false;
+    for (let j = rowIndex; j < this.columns.length; j++) {
+      if (colValues[j] === colValues[j + 1]) {
+        rightCount++;
+        if (rightCount === this.winBy) {
+          winner = true;
+          return winner;
         }
-        if (j === size) {
-          this.winner = true;
-          break;
-        }
+      } else {
+        break;
       }
     }
+    for (let j = rowIndex; j >= 0; j--) {
+      if (colValues[j] === colValues[j - 1]) {
+        leftCount++;
+        if (leftCount === this.winBy) {
+          winner = true;
+          return winner;
+        }
+      } else {
+        break;
+      }
+    }
+    if (leftCount + rightCount - 1 === this.winBy) {
+      return true;
+    }
+    return null;
   }
-  verticalWinCheck() {
-    let size = this.grids;
-
-    for (let i = 0; i < size; i++) {
-      if (this.squares[0][i].symbol === this.currentPlayer.symbol) {
-        let j;
-
-        for (j = 1; j < size; j++) {
-          if (this.squares[j][i].symbol !== this.currentPlayer.symbol) {
-            break;
-          }
+  diagonalWinnerCheck(rowIndex: number, colIndex: number) {
+    let leftCount = 1,
+      rightCount = 1;
+    let winner = false;
+    for (
+      let i = rowIndex, j = colIndex;
+      i < this.rows.length, j < this.columns.length;
+      i++, j++
+    ) {
+      if (this.squares[i][j] === this.squares[i + 1][j + 1]) {
+        rightCount++;
+        if (rightCount === this.winBy) {
+          winner = true;
+          return winner;
         }
-        if (j === size) {
-          this.winner = true;
-          break;
-        }
+      } else {
+        break;
       }
     }
-  }
-  diagonalWinnerCheck() {
-    if (!this.winner) {
-      let i;
-      let size = this.grids;
-
-      for (i = 0; i < size; i++) {
-        if (this.squares[i][i].symbol !== this.currentPlayer.symbol) {
-          break;
+    for (let i = rowIndex, j = colIndex; i >= 0 && j >= 0; i--, j--) {
+      if (this.squares[i][j] === this.squares[i - 1][j - 1]) {
+        leftCount++;
+        if (leftCount === this.winBy) {
+          winner = true;
+          return winner;
         }
-
-        if (i == size - 1) {
-          this.winner = true;
-          break;
-        }
-      }
-      if (!this.winner) {
-        for (i = 0; i < size; i++) {
-          if (
-            this.squares[i][size - 1 - i].symbol !== this.currentPlayer.symbol
-          ) {
-            break;
-          }
-
-          if (i == size - 1) {
-            this.winner = true;
-            break;
-          }
-        }
+      } else {
+        break;
       }
     }
+    if (leftCount + rightCount - 1 === this.winBy) {
+      return true;
+    }
+    return null;
   }
   async checkGamefull(rows: any): Promise<boolean> {
     let isFull = true;
